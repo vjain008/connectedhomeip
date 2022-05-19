@@ -51,6 +51,12 @@ class MyUserPrompter : public UserPrompter
     // tv should override this with a dialog prompt
     inline void PromptForCommissionOKPermission(uint16_t vendorId, uint16_t productId, const char * commissioneeName) override
     {
+        // Auto accept the commissionee
+        ChipLogDetail(Controller,
+                      "Automatically approving casting client %s [" ChipLogFormatMEI
+                      "," ChipLogFormatMEI "]",
+                      commissioneeName, ChipLogValueMEI(vendorId), ChipLogValueMEI(productId));
+        GetCommissionerDiscoveryController()->Ok();
         return;
     }
 
