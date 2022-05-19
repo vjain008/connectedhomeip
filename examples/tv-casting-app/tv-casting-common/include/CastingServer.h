@@ -26,7 +26,7 @@
 #include "TargetVideoPlayerInfo.h"
 
 constexpr chip::System::Clock::Seconds16 kCommissioningWindowTimeout = chip::System::Clock::Seconds16(3 * 60);
-constexpr chip::EndpointId kTvEndpoint                               = 1;
+constexpr chip::EndpointId kTvEndpoint                               = 6;
 
 /**
  * @brief Represents a TV Casting server that can get the casting app commissioned
