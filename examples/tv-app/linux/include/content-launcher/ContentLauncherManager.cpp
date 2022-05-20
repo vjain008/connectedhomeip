@@ -150,6 +150,25 @@ void ContentLauncherManager::HandleLaunchUrl(CommandResponseHelper<LaunchRespons
         Zcl, "ContentLauncherManager::HandleLaunchUrl TEST CASE ContentURL=%s DisplayString=%s BrandingInformation.ProviderName=%s",
         contentUrlString.c_str(), displayStringString.c_str(), providerNameString.c_str());
 
+    //Code for Demo#1
+	if(strcmp(displayStringString.c_str(), "demo") == 0)
+	{
+		string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\": \"2.0\",\"id\": 42,\"method\": \"org.rdk.RDKShell.1.launch\",\"params\": {\"callsign\": \"demo\",\"type\": \"HtmlApp\",\"version\": \"1.0\",\"uri\":\"");
+		command.append(contentUrlString);
+		command.append("\",\"topmost\": true,\"focus\": true}}' http://127.0.0.1:9998/jsonrpc");
+		
+		ChipLogProgress(Zcl, "ContentLauncherManager::command = %s", command.c_str());
+		
+		system(command.c_str());
+	}
+	else if(strcmp(displayStringString.c_str(), "destroy") == 0)
+	{
+		string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.destroy\", \"params\": {\"callsign\": \"demo\"}}' http://127.0.0.1:9998/jsonrpc");
+		ChipLogProgress(Zcl, "ContentLauncherManager::command = %s", command.c_str());
+		
+		system(command.c_str());
+	}
+
     // TODO: Insert code here
     LaunchResponseType response;
     response.data   = chip::MakeOptional(CharSpan::fromCharString("exampleData"));
