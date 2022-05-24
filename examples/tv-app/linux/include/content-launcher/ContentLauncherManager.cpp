@@ -51,8 +51,8 @@ void ContentLauncherManager::HandleLaunchUrl(CommandResponseHelper<LaunchRespons
 
     string contentUrlString(contentUrl.data(), contentUrl.size());
     string displayStringString(displayString.data(), displayString.size());
-
-    //Code for Demo#1
+	
+	//Code for Demo#1
 	if (contentUrlString.find("https") != std::string::npos) {
 		if(strcmp(displayStringString.c_str(), "demo") == 0)
 		{
@@ -87,47 +87,54 @@ void ContentLauncherManager::HandleLaunchUrl(CommandResponseHelper<LaunchRespons
 		}
 		else if(strcmp(contentUrlString.c_str(), "Disney") == 0)
 		{
-			if(strcmp(displayStringString.c_str(), "demo") == 0)
-			{
-				string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\": \"2.0\",\"id\": 42,\"method\": \"org.rdk.RDKShell.1.launch\",\"params\": {\"callsign\": \"HtmlApp-0\",\"type\": \"\",\"version\": \"1.0\",\"uri\":\"https://cd-dmgz.bamgrid.com/bbd/prod/1.19.0.ironman.02/comcast_x1.html?partnerId=xglobal&lmt=0&us_privacy=1-N-\",\"visible\": true,\"focused\": true,\"topmost\": true,\"focus\": true}}' http://127.0.0.1:9998/jsonrpc");
-				system(command.c_str());
-			}
-			else if(strcmp(displayStringString.c_str(), "destroy") == 0)
+			if(strcmp(displayStringString.c_str(), "destroy") == 0)
 			{
 				string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.destroy\", \"params\": {\"callsign\": \"HtmlApp-0\"}}' http://127.0.0.1:9998/jsonrpc");
+				system(command.c_str());
+			}
+			else
+			{
+				string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\": \"2.0\",\"id\": 42,\"method\": \"org.rdk.RDKShell.1.launch\",\"params\": {\"callsign\": \"HtmlApp-0\",\"type\": \"\",\"version\": \"1.0\",\"uri\":\"");
+				command.append(displayStringString);
+				command.append("\",\"visible\": true,\"focused\": true,\"topmost\": true,\"focus\": true}}' http://127.0.0.1:9998/jsonrpc");
 				system(command.c_str());
 			}
 		}
 		else if(strcmp(contentUrlString.c_str(), "Prime") == 0)
 		{
-			if(strcmp(displayStringString.c_str(), "demo") == 0)
-			{
-				string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\": \"2.0\",\"id\": 42,\"method\": \"org.rdk.RDKShell.1.launch\",\"params\": {\"callsign\": \"HtmlApp-0\",\"type\": \"\",\"version\": \"1.0\",\"uri\":\"https://avpk-a12ttfat8x8j46-0.api.amazonvideo.com/lrc-vending/html5/index.html?deviceTypeID=A12TTFAT8X8J46&deviceID=77e8c216a79287298f72f13332dbdc1ecea479e7&comcast-zipcode=66952&canCacheInitJs=false&lmt=0&us_privacy=1-N-\",\"visible\": true,\"focused\": true,\"topmost\": true,\"focus\": true}}' http://127.0.0.1:9998/jsonrpc");
-				system(command.c_str());
-			}
-			else if(strcmp(displayStringString.c_str(), "destroy") == 0)
+			if(strcmp(displayStringString.c_str(), "destroy") == 0)
 			{
 				string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.destroy\", \"params\": {\"callsign\": \"HtmlApp-0\"}}' http://127.0.0.1:9998/jsonrpc");
 				system(command.c_str());
 			}
+			else
+			{
+				string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\": \"2.0\",\"id\": 42,\"method\": \"org.rdk.RDKShell.1.launch\",\"params\": {\"callsign\": \"HtmlApp-0\",\"type\": \"\",\"version\": \"1.0\",\"uri\":\"");
+				command.append(displayStringString);
+				command.append("\",\"visible\": true,\"focused\": true,\"topmost\": true,\"focus\": true}}' http://127.0.0.1:9998/jsonrpc");
+				system(command.c_str());
+			}	
 		}
 		else if(strcmp(contentUrlString.c_str(), "YouTube") == 0)
 		{
-			if(strcmp(displayStringString.c_str(), "demo") == 0)
-			{
-				string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\": \"2.0\",\"id\": 42,\"method\": \"org.rdk.RDKShell.1.launch\",\"params\": {\"callsign\": \"Cobalt-0\",\"type\": \"Cobalt\",\"version\": \"1.0\",\"uri\":\"\",\"visible\": true,\"focused\": true,\"topmost\": true,\"focus\": true}}' http://127.0.0.1:9998/jsonrpc");
-				system(command.c_str());
-			}
-			else if(strcmp(displayStringString.c_str(), "destroy") == 0)
+			if(strcmp(displayStringString.c_str(), "destroy") == 0)
 			{
 				string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.destroy\", \"params\": {\"callsign\": \"Cobalt-0\"}}' http://127.0.0.1:9998/jsonrpc");
 				system(command.c_str());
 			}
 			else
 			{
-				string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" 'http://127.0.0.1:9998/jsonrpc' -d '{\"jsonrpc\": \"2.0\",\"id\": 4,\"method\": \"Cobalt-0.1.deeplink\", \"params\": {\"?launch=search&v=");
+				//Launch
+				string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\": \"2.0\",\"id\": 42,\"method\": \"org.rdk.RDKShell.1.launch\",\"params\": {\"callsign\": \"Cobalt-0\",\"type\": \"Cobalt\",\"version\": \"1.0\",\"uri\":\"\",\"visible\": true,\"focused\": true,\"topmost\": true,\"focus\": true}}' http://127.0.0.1:9998/jsonrpc");
+
+				//Adding deeplink command
+				command.append(";");
+				command.append("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" 'http://127.0.0.1:9998/jsonrpc' -d '{\"jsonrpc\": \"2.0\",\"id\": 4,\"method\": \"Cobalt-0.1.deeplink\", \"params\": {\"?launch=search&v=");
 				command.append(displayStringString.c_str());
 				command.append("&inApp=false\"}}' ; echo");
+				
+				ChipLogProgress(Zcl, "ContentLauncherManager::HandleLaunchUrl YouTube Command = %s", command.c_str());
+				
 				system(command.c_str());
 			}
 		}
