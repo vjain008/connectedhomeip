@@ -19,8 +19,6 @@
 #include <lib/support/SafeInt.h>
 #include <platform/CHIPDeviceLayer.h>
 #include <platform/Linux/NetworkCommissioningDriver.h>
-#include <platform/Linux/ThreadStackManagerImpl.h>
-#include <platform/ThreadStackManager.h>
 
 #include <limits>
 #include <string>
@@ -35,6 +33,8 @@ namespace NetworkCommissioning {
 
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD
 
+#include <platform/Linux/ThreadStackManagerImpl.h>
+#include <platform/ThreadStackManager.h>
 // NOTE: For ThreadDriver, we uses two network configs, one is mSavedNetwork, and another is mStagingNetwork, during init, it will
 // load the network config from otbr-agent, and loads it into both mSavedNetwork and mStagingNetwork. When updating the networks,
 // all changed are made on the staging network.
