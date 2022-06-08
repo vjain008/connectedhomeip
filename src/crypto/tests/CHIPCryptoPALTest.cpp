@@ -1677,10 +1677,10 @@ static void TestSPAKE2P_RFC(nlTestSuite * inSuite, void * inContext)
     size_t Pverifier_len = sizeof(Pverifier);
     uint8_t Vverifier[kMAX_Hash_Length];
     size_t Vverifier_len = sizeof(Vverifier);
-    uint8_t VKe[kMAX_Hash_Length];
-    size_t VKe_len = sizeof(VKe);
-    uint8_t PKe[kMAX_Hash_Length];
-    size_t PKe_len = sizeof(PKe);
+    uint8_t VK_shared[kMAX_Hash_Length];
+    size_t VK_shared_len = sizeof(VKe);
+    uint8_t PK_shared[kMAX_Hash_Length];
+    size_t PK_shared_len = sizeof(PK_shared);
 
     int numOfTestVectors = ArraySize(rfc_tvs);
     int numOfTestsRan    = 0;
@@ -1777,17 +1777,17 @@ static void TestSPAKE2P_RFC(nlTestSuite * inSuite, void * inContext)
         error = Verifier.KeyConfirm(Pverifier, Pverifier_len);
         NL_TEST_ASSERT(inSuite, error == CHIP_NO_ERROR);
 
-        PKe_len = sizeof(PKe);
-        error   = Prover.GetKeys(PKe, &PKe_len);
+        PK_shared_len = sizeof(PKe);
+        error   = Prover.GetKeys(PK_shared, &PK_shared_len);
         NL_TEST_ASSERT(inSuite, error == CHIP_NO_ERROR);
-        NL_TEST_ASSERT(inSuite, PKe_len == vector->Ke_len);
-        NL_TEST_ASSERT(inSuite, memcmp(PKe, vector->Ke, vector->Ke_len) == 0);
+        NL_TEST_ASSERT(inSuite, PK_shared_len == vector->K_shared_len);
+        NL_TEST_ASSERT(inSuite, memcmp(PK_shared, vector->K_shared, vector->K_shared_len) == 0);
 
-        VKe_len = sizeof(VKe);
-        error   = Verifier.GetKeys(VKe, &VKe_len);
+        VK_shared_len = sizeof(VK_shared);
+        error   = Verifier.GetKeys(VK_shared, &VK_shared_len);
         NL_TEST_ASSERT(inSuite, error == CHIP_NO_ERROR);
-        NL_TEST_ASSERT(inSuite, VKe_len == vector->Ke_len);
-        NL_TEST_ASSERT(inSuite, memcmp(VKe, vector->Ke, vector->Ke_len) == 0);
+        NL_TEST_ASSERT(inSuite, VK_shared_len == vector->K_shared_len);
+        NL_TEST_ASSERT(inSuite, memcmp(VK_shared, vector->K_shared, vector->K_shared_len) == 0);
 
         numOfTestsRan += 1;
     }
