@@ -232,11 +232,6 @@ Spake2p::Spake2p(size_t _fe_size, size_t _point_size, size_t _hash_size)
     point_size = _point_size;
     hash_size  = _hash_size;
 
-    Kca = &Kcab[0];
-    Kcb = &Kcab[hash_size / 2];
-    Ka  = &Kae[0];
-    Ke  = &Kae[hash_size / 2];
-
     M  = nullptr;
     N  = nullptr;
     G  = nullptr;
@@ -248,6 +243,9 @@ Spake2p::Spake2p(size_t _fe_size, size_t _point_size, size_t _hash_size)
     w0 = nullptr;
     w1 = nullptr;
     xy = nullptr;
+
+    K_confirmP = &K_confirmKeys[0];
+    K_confirmV = &K_confirmKeys[kSHA256_Hash_Length];
 
     order  = nullptr;
     tempbn = nullptr;
@@ -352,7 +350,7 @@ CHIP_ERROR Spake2p::ComputeRoundTwo(const uint8_t * in, size_t in_len, uint8_t *
     uint8_t point_buffer[kMAX_Point_Length];
     void * MN        = nullptr; // Choose N if a prover, M if a verifier
     void * XY        = nullptr; // Choose Y if a prover, X if a verifier
-    uint8_t * Kcaorb = nullptr; // Choose Kca if a prover, Kcb if a verifier
+    uint8_t * K_confirmPorV = nullptr; // Choose K_confirmP if a prover, K_confirmV if a verifier
 
     VerifyOrExit(*out_len >= hash_size, error = CHIP_ERROR_INTERNAL);
     VerifyOrExit(state == CHIP_SPAKE2P_STATE::R1, error = CHIP_ERROR_INTERNAL);
@@ -366,7 +364,7 @@ CHIP_ERROR Spake2p::ComputeRoundTwo(const uint8_t * in, size_t in_len, uint8_t *
 
         MN     = N;
         XY     = Y;
-        Kcaorb = Kca;
+        K_confirmPorV = &K_confirmP;
     }
     else if (role == CHIP_SPAKE2P_ROLE::VERIFIER)
     {
@@ -376,7 +374,7 @@ CHIP_ERROR Spake2p::ComputeRoundTwo(const uint8_t * in, size_t in_len, uint8_t *
 
         MN     = M;
         XY     = X;
-        Kcaorb = Kcb;
+        K_confirmPorV = &K_confirmV;
     }
     VerifyOrExit(MN != nullptr, error = CHIP_ERROR_INTERNAL);
     VerifyOrExit(XY != nullptr, error = CHIP_ERROR_INTERNAL);
@@ -410,7 +408,7 @@ CHIP_ERROR Spake2p::ComputeRoundTwo(const uint8_t * in, size_t in_len, uint8_t *
 
     SuccessOrExit(error = GenerateKeys());
 
-    SuccessOrExit(error = Mac(Kcaorb, hash_size / 2, in, in_len, out_span));
+    SuccessOrExit(error = Mac(K_confirmPorV, hash_size, in, in_len, out_span));
     VerifyOrExit(out_span.size() == hash_size, error = CHIP_ERROR_INTERNAL);
 
     state = CHIP_SPAKE2P_STATE::R2;
@@ -423,11 +421,13 @@ exit:
 CHIP_ERROR Spake2p::GenerateKeys()
 {
     static const uint8_t info_keyconfirm[16] = { 'C', 'o', 'n', 'f', 'i', 'r', 'm', 'a', 't', 'i', 'o', 'n', 'K', 'e', 'y', 's' };
+    static const uint8_t info_keyshared[9] = { 'S', 'h', 'a', 'r', 'e', 'd', 'K', 'e', 'y'};
 
-    MutableByteSpan Kae_span{ &Kae[0], sizeof(Kae) };
+    MutableByteSpan K_main_span{ &K_main[0], sizeof(K_main) };
 
-    ReturnErrorOnFailure(HashFinalize(Kae_span));
-    ReturnErrorOnFailure(KDF(Ka, hash_size / 2, nullptr, 0, info_keyconfirm, sizeof(info_keyconfirm), Kcab, hash_size));
+    ReturnErrorOnFailure(HashFinalize(K_main_span));
+    ReturnErrorOnFailure(KDF(K_main, hash_size, nullptr, 0, info_keyconfirm, sizeof(info_keyconfirm), K_confirmKeys, 2 * hash_size));
+    ReturnErrorOnFailure(KDF(K_main, hash_size, nullptr, 0, info_keyshared, sizeof(info_keyshared), K_shared, hash_size));
 
     return CHIP_NO_ERROR;
 }
@@ -436,26 +436,26 @@ CHIP_ERROR Spake2p::KeyConfirm(const uint8_t * in, size_t in_len)
 {
     uint8_t point_buffer[kP256_Point_Length];
     void * XY        = nullptr; // Choose X if a prover, Y if a verifier
-    uint8_t * Kcaorb = nullptr; // Choose Kcb if a prover, Kca if a verifier
+    uint8_t * K_confirmPorV = nullptr; // Choose K_confirmV if a prover, K_confirmP if a verifier
 
     VerifyOrReturnError(state == CHIP_SPAKE2P_STATE::R2, CHIP_ERROR_INTERNAL);
 
     if (role == CHIP_SPAKE2P_ROLE::PROVER)
     {
         XY     = X;
-        Kcaorb = Kcb;
+        K_confirmPorV = &K_confirmV;
     }
     else if (role == CHIP_SPAKE2P_ROLE::VERIFIER)
     {
         XY     = Y;
-        Kcaorb = Kca;
+        K_confirmPorV = &K_confirmP;
     }
     VerifyOrReturnError(XY != nullptr, CHIP_ERROR_INTERNAL);
-    VerifyOrReturnError(Kcaorb != nullptr, CHIP_ERROR_INTERNAL);
+    VerifyOrReturnError(K_confirmPorV != nullptr, CHIP_ERROR_INTERNAL);
 
     ReturnErrorOnFailure(PointWrite(XY, point_buffer, point_size));
 
-    CHIP_ERROR err = MacVerify(Kcaorb, hash_size / 2, in, in_len, point_buffer, point_size);
+    CHIP_ERROR err = MacVerify(K_confirmPorV, hash_size, in, in_len, point_buffer, point_size);
     if (err == CHIP_ERROR_INTERNAL)
     {
         ChipLogError(SecureChannel, "Failed to verify peer's MAC. This can happen when setup code is incorrect.");
@@ -473,7 +473,7 @@ CHIP_ERROR Spake2p::GetKeys(uint8_t * out, size_t * out_len)
     VerifyOrExit(state == CHIP_SPAKE2P_STATE::KC, error = CHIP_ERROR_INTERNAL);
     VerifyOrExit(*out_len >= hash_size / 2, error = CHIP_ERROR_INVALID_ARGUMENT);
 
-    memcpy(out, Ke, hash_size / 2);
+    memcpy(out, K_main, hash_size / 2);
     error = CHIP_NO_ERROR;
 exit:
     *out_len = hash_size / 2;

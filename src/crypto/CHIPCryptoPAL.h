@@ -1234,12 +1234,11 @@ protected:
     size_t fe_size;
     size_t hash_size;
     size_t point_size;
-    uint8_t Kcab[kMAX_Hash_Length];
-    uint8_t Kae[kMAX_Hash_Length];
-    uint8_t * Kca;
-    uint8_t * Kcb;
-    uint8_t * Ka;
-    uint8_t * Ke;
+    uint8_t K_main[kMAX_Hash_Length];
+    uint8_t K_confirmKeys[2 * kSHA256_Hash_Length];
+    uint8_t *K_confirmP;
+    uint8_t *K_confirmV;
+    uint8_t K_shared[kMAX_Hash_Length];
 };
 
 struct alignas(size_t) Spake2pOpaqueContext
