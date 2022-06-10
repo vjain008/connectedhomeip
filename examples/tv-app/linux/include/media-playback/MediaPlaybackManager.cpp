@@ -61,6 +61,12 @@ uint64_t MediaPlaybackManager::HandleGetSeekRangeEnd()
 void MediaPlaybackManager::HandlePlay(CommandResponseHelper<Commands::PlaybackResponse::Type> & helper)
 {
     // TODO: Insert code here
+	
+	//OK key will be used to Play/Pause
+    string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":13}]}}' http://127.0.0.1:9998/jsonrpc");
+    ChipLogProgress(Zcl, "MediaPlaybackManager::HandlePlay command = %s", command.c_str());
+    system(command.c_str());
+	
     mCurrentState = PlaybackStateEnum::kPlaying;
     Commands::PlaybackResponse::Type response;
     response.data   = chip::MakeOptional(CharSpan::fromCharString("data response"));
@@ -71,6 +77,12 @@ void MediaPlaybackManager::HandlePlay(CommandResponseHelper<Commands::PlaybackRe
 void MediaPlaybackManager::HandlePause(CommandResponseHelper<Commands::PlaybackResponse::Type> & helper)
 {
     // TODO: Insert code here
+	
+	//OK key will be used to Play/Pause
+    string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":13}]}}' http://127.0.0.1:9998/jsonrpc");
+    ChipLogProgress(Zcl, "MediaPlaybackManager::HandlePlay command = %s", command.c_str());
+    system(command.c_str());
+	
     mCurrentState = PlaybackStateEnum::kPaused;
     Commands::PlaybackResponse::Type response;
     response.data   = chip::MakeOptional(CharSpan::fromCharString("data response"));
@@ -81,6 +93,12 @@ void MediaPlaybackManager::HandlePause(CommandResponseHelper<Commands::PlaybackR
 void MediaPlaybackManager::HandleStop(CommandResponseHelper<Commands::PlaybackResponse::Type> & helper)
 {
     // TODO: Insert code here
+	
+	//Back key will be used to Stop Video and go back to Landing screen
+    string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":8}]}}' http://127.0.0.1:9998/jsonrpc");
+    ChipLogProgress(Zcl, "MediaPlaybackManager::HandlePlay command = %s", command.c_str());
+    system(command.c_str());
+	
     mCurrentState = PlaybackStateEnum::kNotPlaying;
     Commands::PlaybackResponse::Type response;
     response.data   = chip::MakeOptional(CharSpan::fromCharString("data response"));
@@ -91,6 +109,12 @@ void MediaPlaybackManager::HandleStop(CommandResponseHelper<Commands::PlaybackRe
 void MediaPlaybackManager::HandleFastForward(CommandResponseHelper<Commands::PlaybackResponse::Type> & helper)
 {
     // TODO: Insert code here
+	
+	//Right key will be used to FFWD Video
+    string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":39}]}}' http://127.0.0.1:9998/jsonrpc");
+    ChipLogProgress(Zcl, "MediaPlaybackManager::HandlePlay command = %s", command.c_str());
+    system(command.c_str());
+	
     Commands::PlaybackResponse::Type response;
     response.data   = chip::MakeOptional(CharSpan::fromCharString("data response"));
     response.status = MediaPlaybackStatusEnum::kSuccess;
@@ -110,6 +134,12 @@ void MediaPlaybackManager::HandlePrevious(CommandResponseHelper<Commands::Playba
 void MediaPlaybackManager::HandleRewind(CommandResponseHelper<Commands::PlaybackResponse::Type> & helper)
 {
     // TODO: Insert code here
+	
+	//Left key will be used to RWD Video
+    string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":37}]}}' http://127.0.0.1:9998/jsonrpc");
+    ChipLogProgress(Zcl, "MediaPlaybackManager::HandlePlay command = %s", command.c_str());
+    system(command.c_str());
+	
     mPlaybackPosition = { 0, chip::app::DataModel::Nullable<uint64_t>(0) };
     Commands::PlaybackResponse::Type response;
     response.data   = chip::MakeOptional(CharSpan::fromCharString("data response"));
