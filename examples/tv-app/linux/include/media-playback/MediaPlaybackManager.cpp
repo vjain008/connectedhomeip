@@ -81,7 +81,10 @@ void MediaPlaybackManager::HandlePause(CommandResponseHelper<Commands::PlaybackR
 	//OK key will be used to Play/Pause
     string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":13}]}}' http://127.0.0.1:9998/jsonrpc");
     ChipLogProgress(Zcl, "MediaPlaybackManager::HandlePlay command = %s", command.c_str());
-    system(command.c_str());
+    //First key to display progress bar
+	system(command.c_str());
+	//Second key to pause
+	system(command.c_str());
 	
     mCurrentState = PlaybackStateEnum::kPaused;
     Commands::PlaybackResponse::Type response;
