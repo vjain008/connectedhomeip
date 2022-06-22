@@ -18,6 +18,7 @@
 
 #include "KeypadInputManager.h"
 
+using namespace std;
 using namespace chip;
 using namespace chip::app::Clusters::KeypadInput;
 
@@ -29,22 +30,46 @@ void KeypadInputManager::HandleSendKey(CommandResponseHelper<SendKeyResponseType
     switch (keycCode)
     {
     case CecKeyCodeType::kUp:
-        response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+        {
+			string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":38}]}}' http://127.0.0.1:9998/jsonrpc");
+			system(command.c_str());
+			response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+		}
         break;
     case CecKeyCodeType::kDown:
-        response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+        {
+			string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":40}]}}' http://127.0.0.1:9998/jsonrpc");
+			system(command.c_str());
+			response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+		}
         break;
     case CecKeyCodeType::kLeft:
-        response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+        {
+			string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":37}]}}' http://127.0.0.1:9998/jsonrpc");
+			system(command.c_str());
+			response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+		}
         break;
     case CecKeyCodeType::kRight:
-        response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+        {
+			string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":39}]}}' http://127.0.0.1:9998/jsonrpc");
+			system(command.c_str());
+			response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+		}
         break;
     case CecKeyCodeType::kSelect:
-        response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+		{
+			string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":13}]}}' http://127.0.0.1:9998/jsonrpc");
+			system(command.c_str());
+			response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+		}
         break;
     case CecKeyCodeType::kBackward:
-        response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+        {
+			string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":8}]}}' http://127.0.0.1:9998/jsonrpc");
+			system(command.c_str());
+			response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+		}
         break;
     case CecKeyCodeType::kExit:
         response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
@@ -53,10 +78,18 @@ void KeypadInputManager::HandleSendKey(CommandResponseHelper<SendKeyResponseType
         response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
         break;
     case CecKeyCodeType::kSetupMenu:
-        response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+        {
+			string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":113}]}}' http://127.0.0.1:9998/jsonrpc");
+			system(command.c_str());
+			response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+		}
         break;
     case CecKeyCodeType::kEnter:
-        response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+        {
+			string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":13}]}}' http://127.0.0.1:9998/jsonrpc");
+			system(command.c_str());
+			response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;
+		}
         break;
     case CecKeyCodeType::kNumber0OrNumber10:
         response.status = chip::app::Clusters::KeypadInput::KeypadInputStatusEnum::kSuccess;

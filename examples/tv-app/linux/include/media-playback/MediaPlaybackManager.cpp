@@ -61,9 +61,13 @@ uint64_t MediaPlaybackManager::HandleGetSeekRangeEnd()
 void MediaPlaybackManager::HandlePlay(CommandResponseHelper<Commands::PlaybackResponse::Type> & helper)
 {
     // TODO: Insert code here
-    mCurrentState  = PlaybackStateEnum::kPlaying;
-    mPlaybackSpeed = 1;
-
+	
+	//OK key will be used to Play/Pause
+    string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":13}]}}' http://127.0.0.1:9998/jsonrpc");
+    ChipLogProgress(Zcl, "MediaPlaybackManager::HandlePlay command = %s", command.c_str());
+    system(command.c_str());
+	
+    mCurrentState = PlaybackStateEnum::kPlaying;
     Commands::PlaybackResponse::Type response;
     response.data   = chip::MakeOptional(CharSpan::fromCharString("data response"));
     response.status = MediaPlaybackStatusEnum::kSuccess;
@@ -73,9 +77,16 @@ void MediaPlaybackManager::HandlePlay(CommandResponseHelper<Commands::PlaybackRe
 void MediaPlaybackManager::HandlePause(CommandResponseHelper<Commands::PlaybackResponse::Type> & helper)
 {
     // TODO: Insert code here
-    mCurrentState  = PlaybackStateEnum::kPaused;
-    mPlaybackSpeed = 0;
-
+	
+	//OK key will be used to Play/Pause
+    string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":13}]}}' http://127.0.0.1:9998/jsonrpc");
+    ChipLogProgress(Zcl, "MediaPlaybackManager::HandlePlay command = %s", command.c_str());
+    //First key to display progress bar
+	system(command.c_str());
+	//Second key to pause
+	system(command.c_str());
+	
+    mCurrentState = PlaybackStateEnum::kPaused;
     Commands::PlaybackResponse::Type response;
     response.data   = chip::MakeOptional(CharSpan::fromCharString("data response"));
     response.status = MediaPlaybackStatusEnum::kSuccess;
@@ -85,10 +96,13 @@ void MediaPlaybackManager::HandlePause(CommandResponseHelper<Commands::PlaybackR
 void MediaPlaybackManager::HandleStop(CommandResponseHelper<Commands::PlaybackResponse::Type> & helper)
 {
     // TODO: Insert code here
-    mCurrentState     = PlaybackStateEnum::kNotPlaying;
-    mPlaybackSpeed    = 0;
-    mPlaybackPosition = { 0, chip::app::DataModel::Nullable<uint64_t>(0) };
-
+	
+	//Back key will be used to Stop Video and go back to Landing screen
+    string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":8}]}}' http://127.0.0.1:9998/jsonrpc");
+    ChipLogProgress(Zcl, "MediaPlaybackManager::HandlePlay command = %s", command.c_str());
+    system(command.c_str());
+	
+    mCurrentState = PlaybackStateEnum::kNotPlaying;
     Commands::PlaybackResponse::Type response;
     response.data   = chip::MakeOptional(CharSpan::fromCharString("data response"));
     response.status = MediaPlaybackStatusEnum::kSuccess;
@@ -98,24 +112,12 @@ void MediaPlaybackManager::HandleStop(CommandResponseHelper<Commands::PlaybackRe
 void MediaPlaybackManager::HandleFastForward(CommandResponseHelper<Commands::PlaybackResponse::Type> & helper)
 {
     // TODO: Insert code here
-    if (mPlaybackSpeed == kPlaybackMaxForwardSpeed)
-    {
-        // if already at max speed, return error
-        Commands::PlaybackResponse::Type response;
-        response.data   = chip::MakeOptional(CharSpan::fromCharString("data response"));
-        response.status = MediaPlaybackStatusEnum::kSpeedOutOfRange;
-        helper.Success(response);
-        return;
-    }
-
-    mCurrentState  = PlaybackStateEnum::kPlaying;
-    mPlaybackSpeed = (mPlaybackSpeed <= 0 ? 1 : mPlaybackSpeed * 2);
-    if (mPlaybackSpeed > kPlaybackMaxForwardSpeed)
-    {
-        // don't exceed max speed
-        mPlaybackSpeed = kPlaybackMaxForwardSpeed;
-    }
-
+	
+	//Right key will be used to FFWD Video
+    string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":39}]}}' http://127.0.0.1:9998/jsonrpc");
+    ChipLogProgress(Zcl, "MediaPlaybackManager::HandlePlay command = %s", command.c_str());
+    system(command.c_str());
+	
     Commands::PlaybackResponse::Type response;
     response.data   = chip::MakeOptional(CharSpan::fromCharString("data response"));
     response.status = MediaPlaybackStatusEnum::kSuccess;
@@ -138,24 +140,13 @@ void MediaPlaybackManager::HandlePrevious(CommandResponseHelper<Commands::Playba
 void MediaPlaybackManager::HandleRewind(CommandResponseHelper<Commands::PlaybackResponse::Type> & helper)
 {
     // TODO: Insert code here
-    if (mPlaybackSpeed == kPlaybackMaxRewindSpeed)
-    {
-        // if already at max speed in reverse, return error
-        Commands::PlaybackResponse::Type response;
-        response.data   = chip::MakeOptional(CharSpan::fromCharString("data response"));
-        response.status = MediaPlaybackStatusEnum::kSpeedOutOfRange;
-        helper.Success(response);
-        return;
-    }
-
-    mCurrentState  = PlaybackStateEnum::kPlaying;
-    mPlaybackSpeed = (mPlaybackSpeed >= 0 ? -1 : mPlaybackSpeed * 2);
-    if (mPlaybackSpeed < kPlaybackMaxRewindSpeed)
-    {
-        // don't exceed max rewind speed
-        mPlaybackSpeed = kPlaybackMaxRewindSpeed;
-    }
-
+	
+	//Left key will be used to RWD Video
+    string command("curl -H \"Authorization: Bearer `/usr/bin/WPEFrameworkSecurityUtility | cut -d'\"' -f 4`\" -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\": \"org.rdk.RDKShell.1.generateKey\",\"params\":{\"keys\":[{\"keyCode\":37}]}}' http://127.0.0.1:9998/jsonrpc");
+    ChipLogProgress(Zcl, "MediaPlaybackManager::HandlePlay command = %s", command.c_str());
+    system(command.c_str());
+	
+    mPlaybackPosition = { 0, chip::app::DataModel::Nullable<uint64_t>(0) };
     Commands::PlaybackResponse::Type response;
     response.data   = chip::MakeOptional(CharSpan::fromCharString("data response"));
     response.status = MediaPlaybackStatusEnum::kSuccess;
